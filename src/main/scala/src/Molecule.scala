@@ -1,7 +1,14 @@
 package src
 
 class Molecule(atoms: List[Atom]){
-  def getEnergy = ???
+  def getEnergy(eps0: Int, eps1: Int) = {
+    def iter(atoms: List[Atom]): Int = atoms.tail match {
+      case atom ⇒ 1
+      case atom::tail ⇒ 1
+    }
+
+    iter(atoms)
+  }
 
   def getRadialDistance = ???
 
