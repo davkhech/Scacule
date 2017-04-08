@@ -1,7 +1,7 @@
 package src
 
 class Molecule(atoms: List[Atom]){
-  def getEnergy(eps0: Int, eps1: Int) = {
+  def getEnergy(eps0: Double, eps1: Double) = {
     def iter(atoms: List[(Atom, Atom)], d: Set[Atom], s: Set[Atom]): (Set[Atom], Set[Atom]) = atoms match {
       case Nil ⇒ (d, s)
       case h::t ⇒
