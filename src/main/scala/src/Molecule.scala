@@ -17,6 +17,10 @@ class Molecule(atoms: List[Atom]){
 
   def getRadialDistance = Math.sqrt(Math.pow(atoms.head.x, 2) + Math.pow(atoms.head.y, 2))
 
+  def getX = atoms.head.x
+
+  def getY = atoms.head.y
+
   override def toString: String = {
     atoms.map(atom ⇒ "(" + atom.x + ", " + atom.y + ") ").reduce(_ + _)
   }
