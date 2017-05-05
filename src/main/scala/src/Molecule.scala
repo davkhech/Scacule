@@ -5,7 +5,7 @@ class Molecule(atoms: List[Atom]){
     def iter(atoms: List[(Atom, Atom)], d: Set[Atom], s: Set[Atom]): (Set[Atom], Set[Atom]) = atoms match {
       case Nil ⇒ (d, s)
       case h::t ⇒
-        if (h._1.y == 0 && h._2.y == 0) iter(t, d + h._1 + h._2, s)
+        if (h._1.y == 0 && h._2.y == 0) iter(t, d + h._1 + h._2, s + h._1 + h._2)
         else if (h._1.y != 0 && h._2.y == 0) iter(t, d, s + h._2)
         else if (h._1.y == 0 && h._2.y != 0) iter(t, d, s + h._1)
         else iter(t, d, s)
