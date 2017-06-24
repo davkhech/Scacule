@@ -6,11 +6,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Main extends App{
   println("Starting the computation ...")
   val startTime = System.currentTimeMillis()
-  val molecules = Solver.createMoleculeList(12)
-  val moleculeComputeEndTime = System.currentTimeMillis()
-  printf("All molecule combinations are ready in %dms. Computing the statistics ...\n", moleculeComputeEndTime - startTime)
-  (270 to 300).map {t ⇒
-    Statistics.forTemperature(t, molecules)
+  val polymers = Solver.createPolymerListSelfCross(9)
+  val polymerComputeEndTime = System.currentTimeMillis()
+  printf("All molecule combinations are ready in %dms. Computing the statistics ...\n", polymerComputeEndTime - startTime)
+
+  (300 to 310).map {t ⇒
+    Statistics.forTemperature(t, polymers)
   }foreach println
 
 //  (270 to 320).map {t ⇒

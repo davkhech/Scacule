@@ -3,19 +3,34 @@ package src
 object Solver {
   val dR = List((0, 1), (-1, 0), (0, -1), (1, 0))
 
-  def createMoleculeList(len: Int): List[Molecule] = {
-    val atomAt = atomGetter(len)
-    def _iter(l: Int, trace: List[Atom]): List[Molecule] = {
+  def createPolymerListSelfCross(len: Int): List[Polymer] = {
+    val moleculeAt = moleculeGetter(len)
+    def _iter(l: Int, trace: List[Molecule]): List[Polymer] = {
       val last = trace.head
-      if (l == 0) List(Molecule(trace))
-      else dR.map(dr ⇒ _iter(l - 1, atomAt(last.x + dr._1, last.y + dr._2) :: trace)).reduce(_ ++ _)
+      if (l == 0) List(Polymer(trace))
+      else dR.map(dr ⇒ _iter(l - 1, moleculeAt(last.x + dr._1, last.y + dr._2) :: trace)).reduce(_ ++ _)
     }
 
-    _iter(len, List(Atom(0, 0)))
+    _iter(len, List(moleculeAt(0, 0)))
   }
 
-  def atomGetter(len: Int): (Int, Int) ⇒ Atom = {
-    lazy val atoms = (-len to len).map(x ⇒ x → (-len to len).map(y ⇒ y → Atom(x, y)).toMap).toMap
+  def createPolymerList(len: Int): List[Polymer] = {
+    val moleculeAt = moleculeGetter(len)
+    def _iter(l: Int, trace: List[Molecule], set: Set[Molecule]): List[Polymer] = {
+      val last = trace.head
+
+      if (l == 0) List(Polymer(trace))
+      else dR.map(dr ⇒ {
+        val next = moleculeAt(last.x + dr._1, last.y + dr._2)
+        if (!set.contains(next)) _iter(l - 1, next :: trace, set + last) else List()
+      }).reduce(_ ++ _)
+    }
+
+    _iter(len, List(moleculeAt(0, 0)), Set(moleculeAt(0, 0)))
+  }
+
+  def moleculeGetter(len: Int): (Int, Int) ⇒ Molecule = {
+    lazy val atoms = (-len to len).map(x ⇒ x → (-len to len).map(y ⇒ y → Molecule(x, y)).toMap).toMap
 
     (x: Int, y: Int) ⇒ atoms(x)(y)
   }

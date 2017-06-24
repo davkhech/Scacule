@@ -8,18 +8,18 @@ object Statistics {
   def apply(T: Double, meanRadius: Double, meanXSqr: Double, meanYSqr: Double, meanEnergy: Double, meanSqrEnergy: Double): Statistics =
     new Statistics(T, meanRadius, meanXSqr, meanYSqr, meanEnergy, meanSqrEnergy)
 
-  def forTemperature(T: Double, molecules: List[Molecule]) = {
-    val num = molecules.size
+  def forTemperature(T: Double, polymers: List[Polymer]) = {
+    val num = polymers.size
     println(s"Temperature is $T, the number of molecules $num")
 
-    val energies = extractEnergiesFrom(molecules)
+    val energies = extractEnergiesFrom(polymers)
     val norm = energyNorm(energies, T)
 
 //    val meanRadius = radius(molecules, T) / norm
 //    val meanXSqr = meanX(molecules, T) / norm
 //    val meanYSqr = meanY(molecules, T) / norm
 
-    val meanRXY = meanDist(molecules, T)
+    val meanRXY = meanDist(polymers, T)
     val meanRadius = meanRXY._1 / norm
     val meanXSqr = meanRXY._2 / norm
     val meanYSqr = meanRXY._3 / norm
@@ -29,8 +29,8 @@ object Statistics {
     Statistics(T, meanRadius, meanXSqr, meanYSqr, meanEnergy, meanSqrEnergy)
   }
 
-  def extractEnergiesFrom(molecules: List[Molecule]) =
-    molecules.map(molecule ⇒ molecule.getEnergy(eps0, eps1))
+  def extractEnergiesFrom(polymers: List[Polymer]) =
+    polymers.map(polymer ⇒ polymer.getEnergy(eps0, eps1))
 
   private def energyNorm(energies: List[Double], T: Double) =
     energies.map(dE ⇒ Math.exp(-dE / (k * T))).sum
@@ -41,33 +41,33 @@ object Statistics {
   private def sqrEnergy(energies: List[Double], T: Double) =
     energies.map(dE ⇒ dE * dE * Math.exp(-dE / (k * T))).sum
 
-  private def radius(molecules: List[Molecule], T: Double) =
-    molecules.map(molecule ⇒ {
+  private def radius(polymers: List[Polymer], T: Double) =
+    polymers.map(molecule ⇒ {
       val dE = molecule.getEnergy(eps0, eps1)
       val dR = molecule.getRadialDistance
       dR * Math.exp(-dE / (k * T))
     }).sum
 
-  private def meanX(molecules: List[Molecule], T: Double) =
-    molecules.map(molecule ⇒ {
-      val dE = molecule.getEnergy(eps0, eps1)
-      val x = molecule.getX
+  private def meanX(polymers: List[Polymer], T: Double) =
+    polymers.map(polymer ⇒ {
+      val dE = polymer.getEnergy(eps0, eps1)
+      val x = polymer.getX
       x * x * Math.exp(-dE / (k * T))
     }).sum
 
-  private def meanY(molecules: List[Molecule], T: Double) =
-    molecules.map(molecule ⇒ {
-      val dE = molecule.getEnergy(eps0, eps1)
-      val y = molecule.getY
+  private def meanY(polymers: List[Polymer], T: Double) =
+    polymers.map(polymer ⇒ {
+      val dE = polymer.getEnergy(eps0, eps1)
+      val y = polymer.getY
       y * y * Math.exp(-dE / (k * T))
     }).sum
 
-  private def meanDist(molecules: List[Molecule], T: Double) =
-    molecules.map { molecule ⇒
-      val dE = molecule.getEnergy(eps0, eps1)
-      val dR = molecule.getRadialDistance
-      val x = molecule.getX
-      val y = molecule.getY
+  private def meanDist(polymers: List[Polymer], T: Double) =
+    polymers.map { polymer ⇒
+      val dE = polymer.getEnergy(eps0, eps1)
+      val dR = polymer.getRadialDistance
+      val x = polymer.getX
+      val y = polymer.getY
       val e = Math.exp(-dE / (k * T))
 
       (dR * e, x * x * e, y * y * e)
