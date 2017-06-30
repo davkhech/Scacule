@@ -21,6 +21,10 @@ class Polymer(molecules: List[Molecule]){
 
   def getY = molecules.head.y
 
+  def getCoordinatesX = molecules map {molecule ⇒ molecule.x}
+
+  def getCoordinatesY = molecules map {molecule ⇒ molecule.y}
+
   override def toString: String = {
     molecules.map(molecule ⇒ "(" + molecule.x + ", " + molecule.y + ") ").reduce(_ + _)
   }

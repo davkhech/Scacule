@@ -1,5 +1,7 @@
 package src
 
+import java.io.{BufferedWriter, File, FileWriter}
+
 object Statistics {
   val k = 0.002
   val eps0 = -28
@@ -78,4 +80,26 @@ object Statistics {
 
 class Statistics(val T: Double, val meanRadius: Double, val meanXSqr: Double, val meanYSqr: Double, val meanEnergy: Double, val meanSqrEnergy: Double){
   override def toString: String = s"T: $T, <r>: $meanRadius, <x^2>: $meanXSqr, <y^2>: $meanYSqr, <E>: $meanEnergy, <E^2>: $meanSqrEnergy"
+}
+
+object StatisticsSet {
+  def apply(stats: List[Statistics]): StatisticsSet = new StatisticsSet(stats)
+}
+
+class StatisticsSet(stats: List[Statistics]){
+
+  def saveCSV(fileName: String = "stats.csv"): Unit = {
+    val file = new File(fileName)
+    val bw = new BufferedWriter(new FileWriter(file))
+    bw.write(toString)
+    bw.close()
+  }
+
+  override def toString: String = {
+    val stringBuilder = new StringBuilder("T,r,x^2,y^2,E,E^2")
+    stats foreach {stat ⇒
+      stringBuilder.append(s"${stat.T},${stat.meanRadius},${stat.meanXSqr},${stat.meanSqrEnergy},${stat.meanEnergy},${stat.meanSqrEnergy}\n")
+    }
+    stringBuilder.toString
+  }
 }
