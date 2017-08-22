@@ -4,8 +4,8 @@ import java.io.{BufferedWriter, File, FileWriter}
 
 object Statistics {
   val k = 0.002
-  val eps0 = -28
-  val eps1 = -28
+  val eps0 = -2
+  val eps1 = 0
 
   def apply(T: Double, meanRadius: Double, meanXSqr: Double, meanYSqr: Double, meanEnergy: Double, meanSqrEnergy: Double): Statistics =
     new Statistics(T, meanRadius, meanXSqr, meanYSqr, meanEnergy, meanSqrEnergy)
@@ -96,9 +96,9 @@ class StatisticsSet(stats: List[Statistics]){
   }
 
   override def toString: String = {
-    val stringBuilder = new StringBuilder("T,r,x^2,y^2,E,E^2")
+    val stringBuilder = new StringBuilder("T,r,x^2,y^2,E,E^2\n")
     stats foreach {stat ⇒
-      stringBuilder.append(s"${stat.T},${stat.meanRadius},${stat.meanXSqr},${stat.meanSqrEnergy},${stat.meanEnergy},${stat.meanSqrEnergy}\n")
+      stringBuilder.append(s"${stat.T},${stat.meanRadius},${stat.meanXSqr},${stat.meanYSqr},${stat.meanEnergy},${stat.meanSqrEnergy}\n")
     }
     stringBuilder.toString
   }

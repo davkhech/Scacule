@@ -7,6 +7,7 @@ object Solver {
     val moleculeAt = moleculeGetter(len)
     def _iter(l: Int, trace: List[Molecule]): List[Polymer] = {
       val last = trace.head
+
       if (l == 0) List(Polymer(trace))
       else dR.map(dr ⇒ _iter(l - 1, moleculeAt(last.x + dr._1, last.y + dr._2) :: trace)).reduce(_ ++ _)
     }
@@ -30,8 +31,8 @@ object Solver {
   }
 
   def moleculeGetter(len: Int): (Int, Int) ⇒ Molecule = {
-    lazy val atoms = (-len to len).map(x ⇒ x → (-len to len).map(y ⇒ y → Molecule(x, y)).toMap).toMap
+    lazy val molecules = (-len to len).map(x ⇒ x → (-len to len).map(y ⇒ y → Molecule(x, y)).toMap).toMap
 
-    (x: Int, y: Int) ⇒ atoms(x)(y)
+    (x: Int, y: Int) ⇒ molecules(x)(y)
   }
 }
